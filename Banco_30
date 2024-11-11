@@ -1,1 +1,750 @@
+// Commit 1: Importando dependências
+import { rl } from "./Banco";
+import { ContaBancaria, ContaCorrente, ContaPoupanca } from "./Banco";
+
+// Commit 2: Definindo as variáveis globais
+let contas: ContaBancaria[] = [];
+let user: ContaBancaria | null = null; // Conta atual selecionada
+
+// Commit 3: Função para criar uma nova conta bancária
+function criarConta(tipo: string): ContaBancaria {
+    console.clear();
+    let id = rl.questionInt("Insira o ID do usuario: ");
+    let nome = rl.question("Insira o nome do usuario: ");
+    let email = rl.question("Insira o email do usuario: ");
+    let senha = rl.questionInt("Insira a senha do usuario: ");
+    let saldo = rl.questionInt("Insira o saldo inicial do usuario: ");
+
+    if (tipo === "1") {
+        let conta = new ContaCorrente(id, nome, email, senha, saldo);
+        console.log(`Conta Corrente criada para ${nome} com saldo de R$${saldo}.`);
+        return conta;
+    } else if (tipo === "2") {
+        let conta = new ContaPoupanca(id, nome, email, senha, saldo);
+        console.log(`Conta Poupança criada para ${nome} com saldo de R$${saldo}.`);
+        return conta;
+    } else {
+        throw new Error("Tipo de conta inválido.");
+    }
+}
+
+// Commit 4: Função para entrar na conta existente
+function EntrarNaConta(): ContaBancaria | null {
+    if (contas.length === 0) { // Verifica se tem conta bancaria
+        console.log("Nenhuma conta cadastrada.");
+        return null;
+    }
+
+    let id = rl.questionInt("Insira o ID da conta: ");
+    let senha = rl.questionInt("Insira a senha da conta: ");
+
+    for (let conta of contas) {
+        if (conta.Id === id && conta.Senha === senha) {
+            console.log(`Bem-vindo(a), ${conta.Nome}!`);
+            return conta;
+        }
+    }
+
+    console.log("ID ou senha incorretos.");
+    return null;
+}
+
+// Commit 5: Função FAQ para tratar dúvidas frequentes dos usuários
+function FAQ(): void {
+    console.clear();
+    console.log(`\ 
+        ---------------------------------------------------------------------------------------------
+        ------------------------------ PERGUNTAS FREQUENTES -----------------------------------------
+        ---------------------------------------------------------------------------------------------
+        - 1. COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?                                       -
+        - 2. ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?                                          -
+        - 3. O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?                                 -
+        - 4. COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?                -
+        - 5. COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?                -
+        - 6. O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?                  -
+        ---------------------------------------------------------------------------------------------
+        ---------------------------- DIGITE "SAIR" PARA VOLTAR --------------------------------------
+        ---------------------------------------------------------------------------------------------`);
+
+    let loop = true;
+
+    while (loop) {
+        let duvida = rl.question("Digite o numero da sua duvida ou 'SAIR' para voltar: ");
+        switch (duvida) {
+            case "1":
+            case " COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?":
+            console.clear();
+                console.log(`\ 
+                1 - ➱ Quando estiver no menu inicial do sistema, escolha a opção para "Entrar na Conta".
+                2 - ✔ Você será solicitado a inserir o ID da sua conta e a senha correspondente.
+                3 - ✔ O sistema verifica se o ID e a senha inseridos correspondem a uma conta existente. 
+                Se estiverem corretos, você será autenticado e poderá acessar as funcionalidades da sua conta.
+                4 - ✔ Se o login for bem-sucedido, uma mensagem de boas-vindas com o seu nome será exibida, 
+                indicando que você entrou na conta com sucesso.\n`);
+                break;
+            case "2":
+            case "ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?":
+            console.clear();
+                console.log(`Sinto muito, nosso Banco é inicial....seu dinheiro agora é nosso! Obrigado.`);
+                break;
+
+            case "3":
+            case "O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?":
+            console.clear();
+                console.log("Se for chorar, manda áudio! Nós não nos responsabilizamos por contas bloqueadas ou suspensas.\n");
+                break;
+
+            case "4":
+            case " COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?":
+            console.clear();
+                console.log(`\ 
+                    1 - ➱ No menu bancário, selecione a opção 2. Entrar na Conta.
+                    2 - ✔ Insira o ID da conta e a senha.
+                    3 - ✔ No menu da conta, selecione a opção 1. 
+                    Ver Extrato para visualizar o saldo e o histórico de transações.\n`);
+                break;
+
+            case "5":
+            case " COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?":
+            console.clear();
+                console.log(`\ 
+                    1 - ➱ No menu bancário, selecione a opção 2. Entrar na Conta.
+                    2 - ✔ Insira o ID da conta e a senha.
+                    3 - ✔ No menu da conta, selecione a opção 4. Transferência.
+                    4 - ✔ Insira o valor da transferência.
+                    5 - ✔ Insira o ID da conta de destino. (O sistema verificará se a conta de destino existe.)
+                    6 - ✔ O sistema realizará a transferência e atualizará o seu saldo e o histórico de transações.\n`);
+                break;
+
+            case "6":
+            case "O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?":
+            console.clear();
+                console.log(`Ligue para a central de atendimento do banco pelo número 4002-8922. 
+                    \n Informe o problema e forneça os detalhes necessários para que a equipe possa investigar a situação.\n`);
+                break;
+
+            case "SAIR":
+            case "Sair":
+            case "sair":
+                loop = false;
+                console.log("Saindo do FAQ...");
+                break;
+
+            default:
+                console.log("Opção inválida. Tente novamente.");
+                break;
+        }
+    }
+}
+
+// Commit 6: Função para exibir o menu inicial
+function menuInicial(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\ 
+        -----------------------------------
+        ------------ BANRISUL -------------
+        -----------------------------------
+        - 1. ACESSAR BANRISUL             -
+        - 2. INFORMAÇÕES DO BANRISUL      -
+        - 3. AJUDA                        -
+        - 4. SAIR                         -
+        -----------------------------------`);
+        
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                console.log("\nEntrando No Banrisul...");
+                menuBancario();
+                break;
+            case 2:
+                console.clear();
+                console.log("\n O Banrisul oferece serviços de contas correntes e poupanças.");
+                break;
+            case 3:
+                console.log("\nEntrando em contato com o FAQ...");
+                FAQ();
+                break;
+            case 4:
+                console.clear();
+                console.log("\nSaindo do sistema...");
+                continuar = false;
+                break;
+            default:
+                console.log("\nOpção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 7: Função para exibir o menu bancário
+function menuBancario(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ----------- MENU BANRISUL ----------
+        ------------------------------------
+        - 1. CRIAR NOVA CONTA              -
+        - 2. ENTRAR NA CONTA               -
+        - 3. VOLTAR AO MENU INICIAL        -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                let tipo = rl
+                    .question(` 
+        -------------------------------------------------
+        ----------- ESCOLHA SUA OPCAO DE CONTA ----------
+        -------------------------------------------------
+                        1 - POUPANCA
+                        2 - CORRENTE 
+                        `)
+                    .toLowerCase();
+                    if (tipo === "1" || tipo === "2") {
+                    let novaConta = criarConta(tipo);
+                    contas.push(novaConta);
+                    console.clear();
+                    }
+                break;
+            case 2:
+                console.clear()
+                user = EntrarNaConta(); 
+                if (user) {
+                    menuConta(user);
+                }
+                break;
+            case 3:
+                console.clear();
+                console.log("Voltando ao menu inicial...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 8: Função para exibir o menu da conta
+function menuConta(user: ContaBancaria): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ------------ MENU CONTA ------------
+        ------------------------------------
+        - 1. VER EXTRATO                   -
+        - 2. REALIZAR DEPÓSITO             -
+        - 3. REALIZAR SAQUE                -
+        - 4. TRANSFERÊNCIA                 -
+        - 5. APLICAR JUROS (POUPANÇA)      -
+        - 6. SAIR DA CONTA                 -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                user.GerarExtrato();
+                break;
+            case 2:
+                let valorDeposito = rl.questionInt("Valor do depósito: ");
+                user.Depositar(valorDeposito);
+                break;
+            case 3:
+                console.clear();
+                let valorSaque = rl.questionInt("Valor do saque: ");
+                user.Sacar(valorSaque);
+                break;
+            case 4:
+                console.clear()
+                let valorTransferencia = rl.questionInt("Valor da transferência: ");
+                let idDestino = rl.questionInt("ID da conta de destino: ");
+                let contaDestino = contas.find((conta) => conta.Id === idDestino);
+                if (contaDestino) {
+                    user.Transferir(valorTransferencia, contaDestino);
+                } else {
+                    console.log("Conta de destino não encontrada.");
+                }
+                break;
+            case 5:
+                console.clear();
+                if (user instanceof ContaPoupanca) { 
+                    let taxa = rl.questionFloat("Taxa de juros (%): ");
+                    user.AplicarJuros(taxa);
+                } else {
+                    console.log("Essa opção está disponível apenas para contas poupança.");
+                }
+                break;
+            case 6:
+                console.log("Saindo da conta...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 9: Função para pressionar Enter e continuar
+function pressionarEnterParaContinuar(): void {
+    rl.question("Pressione Enter para continuar...");
+}
+
+// Commit 10: Iniciar o sistema com o menu inicial
+pressionarEnterParaContinuar();
+menuInicial();
+
+// Commit 11: Adicionando estrutura inicial para criação de conta
+import { rl } from "./Banco";
+import { ContaBancaria, ContaCorrente, ContaPoupanca } from "./Banco";
+
+
+// Commit 12: Inicializando o sistema com o menu inicial
+menuInicial();
+
+// Commit 13: Implementação do menu bancário
+function menuBancario(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ----------- MENU BANRISUL ----------
+        ------------------------------------
+        - 1. CRIAR NOVA CONTA              -
+        - 2. ENTRAR NA CONTA               -
+        - 3. VOLTAR AO MENU INICIAL        -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                let tipo = rl
+                    .question(` 
+        -------------------------------------------------
+        ----------- ESCOLHA SUA OPCAO DE CONTA ----------
+        -------------------------------------------------
+                        1 - POUPANCA
+                        2 - CORRENTE 
+                        `)
+                    .toLowerCase();
+                    if (tipo === "1" || tipo === "2") {
+                    let novaConta = criarConta(tipo);
+                    contas.push(novaConta);
+                    console.clear();
+                    }
+                break;
+            case 2:
+                console.clear()
+                user = EntrarNaConta(); 
+                if (user) {
+                    menuConta(user);
+                }
+                break;
+            case 3:
+                console.clear();
+                console.log("Voltando ao menu inicial...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 14: Implementando o menu da conta
+function menuConta(user: ContaBancaria): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ------------ MENU CONTA ------------
+        ------------------------------------
+        - 1. VER EXTRATO                   -
+        - 2. REALIZAR DEPÓSITO             -
+        - 3. REALIZAR SAQUE                -
+        - 4. TRANSFERÊNCIA                 -
+        - 5. APLICAR JUROS (POUPANÇA)      -
+        - 6. SAIR DA CONTA                 -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                user.GerarExtrato();
+                break;
+            case 2:
+                let valorDeposito = rl.questionInt("Valor do depósito: ");
+                user.Depositar(valorDeposito);
+                break;
+            case 3:
+                console.clear();
+                let valorSaque = rl.questionInt("Valor do saque: ");
+                user.Sacar(valorSaque);
+                break;
+            case 4:
+                console.clear()
+                let valorTransferencia = rl.questionInt("Valor da transferência: ");
+                let idDestino = rl.questionInt("ID da conta de destino: ");
+                let contaDestino = contas.find((conta) => conta.Id === idDestino);
+                if (contaDestino) {
+                    user.Transferir(valorTransferencia, contaDestino);
+                } else {
+                    console.log("Conta de destino não encontrada.");
+                }
+                break;
+            case 5:
+                console.clear();
+                if (user instanceof ContaPoupanca) { 
+                    let taxa = rl.questionFloat("Taxa de juros (%): ");
+                    user.AplicarJuros(taxa);
+                } else {
+                    console.log("Essa opção está disponível apenas para contas poupança.");
+                }
+                break;
+            case 6:
+                console.log("Saindo da conta...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 15: Função para pressionar Enter para continuar
+function pressionarEnterParaContinuar(): void {
+    rl.question("Pressione Enter para continuar...");
+}
+
+// Commit 16: Adicionando funcionalidade para pressionar Enter
+pressionarEnterParaContinuar();
+
+// Commit 17: Chamada para iniciar o sistema
+menuInicial();
+
+// Commit 18: Adicionando tratamento de erros e validação no processo de login
+function EntrarNaConta(): ContaBancaria | null {
+    if (contas.length === 0) {
+        console.log("Nenhuma conta cadastrada.");
+        return null;
+    }
+
+    let id = rl.questionInt("Insira o ID da conta: ");
+    let senha = rl.questionInt("Insira a senha da conta: ");
+
+    for (let conta of contas) {
+        if (conta.Id === id && conta.Senha === senha) {
+            console.log(`Bem-vindo(a), ${conta.Nome}!`);
+            return conta;
+        }
+    }
+
+    console.log("ID ou senha incorretos.");
+    return null;
+}
+
+// Commit 19: Melhorando a visualização das perguntas frequentes no FAQ
+function FAQ(): void {
+    console.clear();
+    console.log(`\ 
+        ---------------------------------------------------------------------------------------------
+        ------------------------------ PERGUNTAS FREQUENTES -----------------------------------------
+        ---------------------------------------------------------------------------------------------
+        - 1. COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?                                       -
+        - 2. ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?                                          -
+        - 3. O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?                                 -
+        - 4. COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?                -
+        - 5. COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?                -
+        - 6. O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?                  -
+        ---------------------------------------------------------------------------------------------
+        ---------------------------- DIGITE "SAIR" PARA VOLTAR --------------------------------------
+        ---------------------------------------------------------------------------------------------`);
+
+    let loop = true;
+
+    while (loop) {
+        let duvida = rl.question("Digite o numero da sua duvida ou 'SAIR' para voltar: ");
+        switch (duvida) {
+            case "1":
+            case " COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?":
+                console.clear();
+                console.log(`\ 
+                1 - ➱ Quando estiver no menu inicial do sistema, escolha a opção para "Entrar na Conta".
+                2 - ✔ Você será solicitado a inserir o ID da sua conta e a senha correspondente.
+                3 - ✔ O sistema verifica se o ID e a senha inseridos correspondem a uma conta existente. 
+                Se estiverem corretos, você será autenticado e poderá acessar as funcionalidades da sua conta.
+                4 - ✔ Se o login for bem-sucedido, uma mensagem de boas-vindas com o seu nome será exibida, 
+                indicando que você entrou na conta com sucesso.\n`);
+                break;
+            case "2":
+            case "ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?":
+                console.clear();
+                console.log(`Sinto muito, nosso Banco é inicial....seu dinheiro agora é nosso! Obrigado.`);
+                break;
+
+            case "3":
+            case "O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?":
+                console.clear();
+                console.log("Se for chorar, manda áudio! Nós não nos responsabilizamos por contas bloqueadas ou suspensas.\n");
+                break;
+
+            case "4":
+            case " COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?":
+                console.clear();
+                console.log(`\ 
+                    1 - ➱ No menu bancário, selecione a opção 2. Entrar na Conta.
+                    2 - ✔ Insira o ID da conta e a senha.
+                    3 - ✔ No menu da conta, selecione a opção 1. 
+                    Ver Extrato para visualizar o saldo e o histórico de transações.\n`);
+                break;
+
+            case "5":
+            case " COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?":
+                console.clear();
+                console.log(`\ 
+                    1 - ➱ No menu bancário, selecione a opção 2. Entrar na Conta.
+                    2 - ✔ Insira o ID da conta e a senha.
+                    3 - ✔ No menu da conta, selecione a opção 4. Transferência.
+                    4 - ✔ Insira o valor da transferência.
+                    5 - ✔ Insira o ID da conta de destino. (O sistema verificará se a conta de destino existe.)
+                    6 - ✔ O sistema realizará a transferência e atualizará o seu saldo e o histórico de transações.\n`);
+                break;
+
+            case "6":
+            case "O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?":
+                console.clear();
+                console.log(`Ligue para a central de atendimento do banco pelo número 4002-8922. 
+                    \n Informe o problema e forneça os detalhes necessários para que a equipe possa investigar a situação.\n`);
+                break;
+
+            case "SAIR":
+            case "Sair":
+            case "sair":
+                loop = false;
+                console.log("Saindo do FAQ...");
+                break;
+
+            default:
+                console.log("Opção inválida. Tente novamente.");
+                break;
+        }
+    }
+}
+
+// Commit 20: Finalizando a funcionalidade FAQ
+FAQ();
+
+// Commit 21: Adicionando mais interatividade no menu principal
+function menuInicial(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\ 
+        -----------------------------------
+        ------------ BANRISUL -------------
+        -----------------------------------
+        - 1. ACESSAR BANRISUL             -
+        - 2. INFORMAÇÕES DO BANRISUL      -
+        - 3. AJUDA                        -
+        - 4. SAIR                         -
+        -----------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                console.log("\nEntrando No Banrisul...");
+                menuBancario();
+                break;
+            case 2:
+                console.clear();
+                console.log("\n O Banrisul oferece serviços de contas correntes e poupanças.");
+                break;
+            case 3:
+                console.log("\nEntrando em contato com o FAQ...");
+                FAQ();
+                break;
+            case 4:
+                console.clear();
+                console.log("\nSaindo do sistema...");
+                continuar = false;
+                break;
+            default:
+                console.log("\nOpção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 22: Continuando a execução do código com o menu inicial
+menuInicial();
+
+
+// Commit 23: Melhorando o menu bancário e opções de conta
+function menuBancario(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ----------- MENU BANRISUL ----------
+        ------------------------------------
+        - 1. CRIAR NOVA CONTA              -
+        - 2. ENTRAR NA CONTA               -
+        - 3. VOLTAR AO MENU INICIAL        -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                let tipo = rl
+                    .question(` 
+        -------------------------------------------------
+        ----------- ESCOLHA SUA OPCAO DE CONTA ----------
+        -------------------------------------------------
+                        1 - POUPANCA
+                        2 - CORRENTE 
+                        `)
+                    .toLowerCase();
+                    if (tipo === "1" || tipo === "2") {
+                    let novaConta = criarConta(tipo);
+                    contas.push(novaConta);
+                    console.clear();
+                    }
+                break;
+            case 2:
+                console.clear();
+                user = EntrarNaConta(); 
+                if (user) {
+                    menuConta(user);
+                }
+                break;
+            case 3:
+                console.clear();
+                console.log("Voltando ao menu inicial...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 24: A função menuConta finalizada e organizada para opções de conta
+function menuConta(user: ContaBancaria): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ------------ MENU CONTA ------------
+        ------------------------------------
+        - 1. VER EXTRATO                   -
+        - 2. REALIZAR DEPÓSITO             -
+        - 3. REALIZAR SAQUE                -
+        - 4. TRANSFERÊNCIA                 -
+        - 5. APLICAR JUROS (POUPANÇA)      -
+        - 6. SAIR DA CONTA                 -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                user.GerarExtrato();
+                break;
+            case 2:
+                let valorDeposito = rl.questionInt("Valor do depósito: ");
+                user.Depositar(valorDeposito);
+                break;
+            case 3:
+                console.clear();
+                let valorSaque = rl.questionInt("Valor do saque: ");
+                user.Sacar(valorSaque);
+                break;
+            case 4:
+                console.clear()
+                let valorTransferencia = rl.questionInt("Valor da transferência: ");
+                let idDestino = rl.questionInt("ID da conta de destino: ");
+                let contaDestino = contas.find((conta) => conta.Id === idDestino);
+                if (contaDestino) {
+                    user.Transferir(valorTransferencia, contaDestino);
+                } else {
+                    console.log("Conta de destino não encontrada.");
+                }
+                break;
+            case 5:
+                console.clear();
+                if (user instanceof ContaPoupanca) { 
+                    let taxa = rl.questionFloat("Taxa de juros (%): ");
+                    user.AplicarJuros(taxa);
+                } else {
+                    console.log("Essa opção está disponível apenas para contas poupança.");
+                }
+                break;
+            case 6:
+                console.log("Saindo da conta...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
+
+// Commit 25: Finalizando a implementação de aplicar juros para contas poupança
+if (user instanceof ContaPoupanca) {
+    let taxa = rl.questionFloat("Taxa de juros (%): ");
+    user.AplicarJuros(taxa);
+} else {
+    console.log("Essa opção está disponível apenas para contas poupança.");
+}
+
+// Commit 26: Criando a função para pressionar Enter e continuar no menu
+function pressionarEnterParaContinuar(): void {
+    rl.question("Pressione Enter para continuar...");
+}
+
+// Commit 27: Chamada da função pressionarEnterParaContinuar
+pressionarEnterParaContinuar();
+
+// Commit 28: Finalizando o sistema com o menu inicial
+menuInicial();
+
+// Commit 29: Ajustando a estrutura do menu FAQ
+function FAQ(): void {
+    console.clear();
+    console.log(`\ 
+        ---------------------------------------------------------------------------------------------
+        ------------------------------ PERGUNTAS FREQUENTES -----------------------------------------
+        ---------------------------------------------------------------------------------------------
+        - 1. COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?                                       -
+        - 2. ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?                                          -
+        - 3. O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?                                 -
+        - 4. COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?                -
+        - 5. COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?                -
+        - 6. O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?                  -
+        ---------------------------------------------------------------------------------------------
+        ---------------------------- DIGITE "SAIR" PARA VOLTAR --------------------------------------
+        ---------------------------------------------------------------------------------------------`);
+}
+
+// Commit 30: Finalizando o fluxo de interação do FAQ
+FAQ();
+
 
