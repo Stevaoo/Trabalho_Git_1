@@ -223,4 +223,5 @@ if (user instanceof ContaPoupanca) {
 }// Commit 26: Criando a função para pressionar Enter e continuar no menu
 function pressionarEnterParaContinuar(): void {
     rl.question("Pressione Enter para continuar...");
-}
+}// Commit 27: Chamada da função pressionarEnterParaContinuar
+pressionarEnterParaContinuar();
