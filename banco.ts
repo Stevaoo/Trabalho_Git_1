@@ -220,4 +220,7 @@ if (user instanceof ContaPoupanca) {
     user.AplicarJuros(taxa);
 } else {
     console.log("Essa opção está disponível apenas para contas poupança.");
+}// Commit 26: Criando a função para pressionar Enter e continuar no menu
+function pressionarEnterParaContinuar(): void {
+    rl.question("Pressione Enter para continuar...");
 }
