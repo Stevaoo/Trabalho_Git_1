@@ -210,3 +210,64 @@ function menuBancario(): void {
         }
     }
 }
+// Commit 8: Função para exibir o menu da conta
+function menuConta(user: ContaBancaria): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ------------ MENU CONTA ------------
+        ------------------------------------
+        - 1. VER EXTRATO                   -
+        - 2. REALIZAR DEPÓSITO             -
+        - 3. REALIZAR SAQUE                -
+        - 4. TRANSFERÊNCIA                 -
+        - 5. APLICAR JUROS (POUPANÇA)      -
+        - 6. SAIR DA CONTA                 -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                user.GerarExtrato();
+                break;
+            case 2:
+                let valorDeposito = rl.questionInt("Valor do depósito: ");
+                user.Depositar(valorDeposito);
+                break;
+            case 3:
+                console.clear();
+                let valorSaque = rl.questionInt("Valor do saque: ");
+                user.Sacar(valorSaque);
+                break;
+            case 4:
+                console.clear()
+                let valorTransferencia = rl.questionInt("Valor da transferência: ");
+                let idDestino = rl.questionInt("ID da conta de destino: ");
+                let contaDestino = contas.find((conta) => conta.Id === idDestino);
+                if (contaDestino) {
+                    user.Transferir(valorTransferencia, contaDestino);
+                } else {
+                    console.log("Conta de destino não encontrada.");
+                }
+                break;
+            case 5:
+                console.clear();
+                if (user instanceof ContaPoupanca) { 
+                    let taxa = rl.questionFloat("Taxa de juros (%): ");
+                    user.AplicarJuros(taxa);
+                } else {
+                    console.log("Essa opção está disponível apenas para contas poupança.");
+                }
+                break;
+            case 6:
+                console.log("Saindo da conta...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
