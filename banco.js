@@ -278,3 +278,7 @@ function pressionarEnterParaContinuar(): void {
 // Commit 10: Iniciar o sistema com o menu inicial
 pressionarEnterParaContinuar();
 menuInicial();
+// Commit 11: Adicionando estrutura inicial para criação de conta
+import { rl } from "./Banco";
+import { ContaBancaria, ContaCorrente, ContaPoupanca } from "./Banco";
+
