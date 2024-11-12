@@ -275,3 +275,6 @@ function menuConta(user: ContaBancaria): void {
 function pressionarEnterParaContinuar(): void {
     rl.question("Pressione Enter para continuar...");
 }
+// Commit 10: Iniciar o sistema com o menu inicial
+pressionarEnterParaContinuar();
+menuInicial();
