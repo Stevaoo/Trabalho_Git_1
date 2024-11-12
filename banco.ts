@@ -97,4 +97,5 @@ function menuInicial(): void {
                 console.log("\nOpção inválida. Tente novamente.");
         }
     }
-}
+}// Commit 22: Continuando a execução do código com o menu inicial
+menuInicial();
