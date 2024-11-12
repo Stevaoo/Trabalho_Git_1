@@ -29,3 +29,26 @@ function EntrarNaConta(): ContaBancaria | null {
     console.log("ID ou senha incorretos.");
     return null;
 }
+
+
+
+case "6":
+    case "O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?":
+        console.clear();
+        console.log(`Ligue para a central de atendimento do banco pelo número 4002-8922. 
+            \n Informe o problema e forneça os detalhes necessários para que a equipe possa investigar a situação.\n`);
+        break;
+
+    case "SAIR":
+    case "Sair":
+    case "sair":
+        loop = false;
+        console.log("Saindo do FAQ...");
+        break;
+
+    default:
+        console.log("Opção inválida. Tente novamente.");
+        break;
+}
+}
+}
