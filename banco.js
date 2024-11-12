@@ -396,3 +396,7 @@ function menuConta(user: ContaBancaria): void {
         }
     }
 }
+// Commit 15: Função para pressionar Enter para continuar
+function pressionarEnterParaContinuar(): void {
+    rl.question("Pressione Enter para continuar...");
+}
