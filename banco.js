@@ -116,3 +116,45 @@ function FAQ(): void {
         }
     }
 }
+
+// Commit 6: Função para exibir o menu inicial
+function menuInicial(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\ 
+        -----------------------------------
+        ------------ BANRISUL -------------
+        -----------------------------------
+        - 1. ACESSAR BANRISUL             -
+        - 2. INFORMAÇÕES DO BANRISUL      -
+        - 3. AJUDA                        -
+        - 4. SAIR                         -
+        -----------------------------------`);
+        
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                console.log("\nEntrando No Banrisul...");
+                menuBancario();
+                break;
+            case 2:
+                console.clear();
+                console.log("\n O Banrisul oferece serviços de contas correntes e poupanças.");
+                break;
+            case 3:
+                console.log("\nEntrando em contato com o FAQ...");
+                FAQ();
+                break;
+            case 4:
+                console.clear();
+                console.log("\nSaindo do sistema...");
+                continuar = false;
+                break;
+            default:
+                console.log("\nOpção inválida. Tente novamente.");
+        }
+    }
+}
