@@ -5,3 +5,6 @@ function pressionarEnterParaContinuar(): void {
 // Commit 17: Chamada para iniciar o sistema
 menuInicial();
 //
+
+// Commit 16: Adicionando funcionalidade para pressionar Enter
+pressionarEnterParaContinuar();
