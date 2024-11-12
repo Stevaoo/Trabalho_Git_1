@@ -226,4 +226,20 @@ function pressionarEnterParaContinuar(): void {
 }// Commit 27: Chamada da função pressionarEnterParaContinuar
 pressionarEnterParaContinuar();
 // Commit 28: Finalizando o sistema com o menu inicial
-menuInicial();
+menuInicial();  // Commit 29: Ajustando a estrutura do menu FAQ
+function FAQ(): void {
+    console.clear();
+    console.log(`\ 
+        ---------------------------------------------------------------------------------------------
+        ------------------------------ PERGUNTAS FREQUENTES -----------------------------------------
+        ---------------------------------------------------------------------------------------------
+        - 1. COMO FAÇO LOGIN NA MINHA CONTA BANCÁRIA ONLINE ?                                       -
+        - 2. ESQUECI MINHA SENHA. COMO POSSO RECUPERA-LÁ ?                                          -
+        - 3. O QUE FAZER SE MINHA CONTA FOR BLOQUEADA OU SUSPENSA ?                                 -
+        - 4. COMO POSSO VERIFICAR O SALDO E HISTÓRICO DE TRANSAÇÕES DA MINHA CONTA ?                -
+        - 5. COMO REALIZAR TRANSFERÊNCIAS ENTRE CONTAS OU PARA TERCEIROS PELO SITE ?                -
+        - 6. O QUE FAZER SE EU SUSPEITAR DE ATIVIDADE FRAUDELENTA NA MINHA CONTA ?                  -
+        ---------------------------------------------------------------------------------------------
+        ---------------------------- DIGITE "SAIR" PARA VOLTAR --------------------------------------
+        ---------------------------------------------------------------------------------------------`);
+}
