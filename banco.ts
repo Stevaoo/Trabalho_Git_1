@@ -225,3 +225,5 @@ function pressionarEnterParaContinuar(): void {
     rl.question("Pressione Enter para continuar...");
 }// Commit 27: Chamada da função pressionarEnterParaContinuar
 pressionarEnterParaContinuar();
+// Commit 28: Finalizando o sistema com o menu inicial
+menuInicial();
