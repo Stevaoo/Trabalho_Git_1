@@ -284,3 +284,54 @@ import { ContaBancaria, ContaCorrente, ContaPoupanca } from "./Banco";
 
 // Commit 12: Inicializando o sistema com o menu inicial
 menuInicial();
+// Commit 13: Implementação do menu bancário
+function menuBancario(): void {
+    console.clear();
+    let continuar = true;
+    while (continuar) {
+        console.log(`\
+        ------------------------------------
+        ----------- MENU BANRISUL ----------
+        ------------------------------------
+        - 1. CRIAR NOVA CONTA              -
+        - 2. ENTRAR NA CONTA               -
+        - 3. VOLTAR AO MENU INICIAL        -
+        ------------------------------------`);
+
+        let opcao = rl.questionInt("Escolha uma opcao: ");
+
+        switch (opcao) {
+            case 1:
+                console.clear();
+                let tipo = rl
+                    .question(` 
+        -------------------------------------------------
+        ----------- ESCOLHA SUA OPCAO DE CONTA ----------
+        -------------------------------------------------
+                        1 - POUPANCA
+                        2 - CORRENTE 
+                        `)
+                    .toLowerCase();
+                    if (tipo === "1" || tipo === "2") {
+                    let novaConta = criarConta(tipo);
+                    contas.push(novaConta);
+                    console.clear();
+                    }
+                break;
+            case 2:
+                console.clear()
+                user = EntrarNaConta(); 
+                if (user) {
+                    menuConta(user);
+                }
+                break;
+            case 3:
+                console.clear();
+                console.log("Voltando ao menu inicial...");
+                continuar = false;
+                break;
+            default:
+                console.log("Opção inválida. Tente novamente.");
+        }
+    }
+}
