@@ -214,3 +214,10 @@ function menuConta(user: ContaBancaria): void {
     }
 }
 
+// Commit 25: Finalizando a implementação de aplicar juros para contas poupança
+if (user instanceof ContaPoupanca) {
+    let taxa = rl.questionFloat("Taxa de juros (%): ");
+    user.AplicarJuros(taxa);
+} else {
+    console.log("Essa opção está disponível apenas para contas poupança.");
+}
