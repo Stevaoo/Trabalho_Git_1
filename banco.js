@@ -282,3 +282,5 @@ menuInicial();
 import { rl } from "./Banco";
 import { ContaBancaria, ContaCorrente, ContaPoupanca } from "./Banco";
 
+// Commit 12: Inicializando o sistema com o menu inicial
+menuInicial();
