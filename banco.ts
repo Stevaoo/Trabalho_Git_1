@@ -52,3 +52,6 @@ case "6":
 }
 }
 }
+
+// Commit 20: Finalizando a funcionalidade FAQ
+FAQ();
